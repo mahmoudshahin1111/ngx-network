@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "ngx-network": {
+    "app": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -15,12 +15,12 @@
       },
       "root": "",
       "sourceRoot": "src",
-      "prefix": "app",
+      "prefix": "nx",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/ngx-network",
+            "outputPath": "dist/app",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -72,10 +72,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "ngx-network:build:production"
+              "browserTarget": "app:build:production"
             },
             "development": {
-              "browserTarget": "ngx-network:build:development"
+              "browserTarget": "app:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -83,7 +83,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "ngx-network:build"
+            "browserTarget": "app:build"
           }
         },
         "test": {
@@ -105,7 +105,38 @@
           }
         }
       }
+    },
+    "ngx-network": {
+      "projectType": "library",
+      "root": "projects/ngx-network",
+      "sourceRoot": "projects/ngx-network/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/ngx-network/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/ngx-network/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/ngx-network/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/ngx-network/src/test.ts",
+            "tsConfig": "projects/ngx-network/tsconfig.spec.json",
+            "karmaConfig": "projects/ngx-network/karma.conf.js"
+          }
+        }
+      }
     }
   },
-  "defaultProject": "ngx-network"
+  "defaultProject": "app"
 }

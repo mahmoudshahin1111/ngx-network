@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { NgxNetworkComponent } from './ngx-network.component';
-
+import {HttpClientModule} from '@angular/common/http'; 
 
 
 @NgModule({
@@ -8,9 +8,10 @@ import { NgxNetworkComponent } from './ngx-network.component';
     NgxNetworkComponent
   ],
   imports: [
+    HttpClientModule
   ],
   exports: [
-    NgxNetworkComponent
+    NgxNetworkComponent,
   ]
 })
 export class NgxNetworkModule { }

@@ -1,6 +1,6 @@
 import { HttpEventType, HttpEvent } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { NgxNetworkService } from 'projects/ngx-network/src/public-api';
+import { NetworkSpeedInfo, NgxNetworkService } from 'projects/ngx-network/src/public-api';
 
 @Component({
   selector: 'app-root',
@@ -9,10 +9,13 @@ import { NgxNetworkService } from 'projects/ngx-network/src/public-api';
 })
 export class AppComponent implements OnInit {
   title = 'ngx-network';
-  constructor(private networkService: NgxNetworkService) {}
+  networkSpeedInfo:NetworkSpeedInfo|undefined;
+  constructor(private networkService: NgxNetworkService) {
+  }
   ngOnInit() {
     this.networkService.start().subscribe((e) => {
       console.log(e);
+      this.networkSpeedInfo = e;
     });
     
   }

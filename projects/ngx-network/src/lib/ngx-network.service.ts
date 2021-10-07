@@ -4,43 +4,36 @@ import {
   HttpEventType,
   HttpRequest,
 } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { Observable, Subject, Subscription } from 'rxjs';
-import {
-  debounceTime,
-  delay,
-  map,
-  repeat,
-  repeatWhen,
-  tap,
-  throttleTime,
-} from 'rxjs/operators';
+import { delay, map, repeatWhen, tap, throttleTime } from 'rxjs/operators';
+import { Config } from './api/config';
 import { NetworkSpeedInfo } from './api/network-speed-info';
 import { Units } from './api/units';
-@Injectable({
-  providedIn: 'root',
-})
+import { NGX_NETWORK_CONFIG } from './ngx-network.module';
+@Injectable()
 export class NgxNetworkService {
-  private speedUnit: Units;
-  private delay: number;
   private speedChanged$: Subject<NetworkSpeedInfo>;
   private onSpeedChanged: Observable<NetworkSpeedInfo>;
   private startSendingPayloadSubscription: Subscription;
-  constructor(private http: HttpClient) {
-    this.delay = 100;
+  constructor(
+    @Inject(NGX_NETWORK_CONFIG) private config: Config,
+    private http: HttpClient
+  ) {
+    console.log('new services is created');
     this.speedChanged$ = new Subject();
     this.onSpeedChanged = this.speedChanged$
       .asObservable()
-      .pipe(throttleTime(this.delay));
+      .pipe(throttleTime(this.config.delay));
     this.startSendingPayloadSubscription = new Subscription();
-    this.speedUnit = Units['mb/s'];
+    this.config.speedUnit = this.config.speedUnit || Units['mb/s'];
   }
   start(): Observable<NetworkSpeedInfo> {
     if (this.startSendingPayloadSubscription) {
       this.startSendingPayloadSubscription.unsubscribe();
     }
     this.startSendingPayloadSubscription = this.startSendingPayload(
-      `https://speed.hetzner.de/100MB.bin`
+      this.config.url
     ).subscribe();
     return this.onSpeedChanged;
   }
@@ -63,40 +56,40 @@ export class NgxNetworkService {
           const downloadPayloadSize = Math.abs(
             currentPayloadSize - lastPayloadSize
           );
+          const elapseTimeSecs = elapseTimeForEveryPayload / 1000;
           let speed: string = '0';
-          if (this.speedUnit === Units['kb/s']) {
-            speed = Number(
-              downloadPayloadSize / 1024 / (elapseTimeForEveryPayload / 1000)
-            ).toFixed(2);
-          } else if (this.speedUnit === Units['mb/s']) {
-            speed = Number(
-              downloadPayloadSize /
-                (1024 * 1024) /
-                (elapseTimeForEveryPayload / 1000)
-            ).toFixed(2);
-          } else if (this.speedUnit === Units['gb/s']) {
-            speed = Number(
-              downloadPayloadSize /
-                (1024 * 2) /
-                (elapseTimeForEveryPayload / 1000)
-            ).toFixed(2);
-          } else if (this.speedUnit === Units['tb/s']) {
-            speed = Number(
-              downloadPayloadSize /
-                (1024 * 3) /
-                (elapseTimeForEveryPayload / 1000)
-            ).toFixed(2);
+          switch (this.config.speedUnit) {
+            case Units['kb/s']:
+              speed = Number(
+                downloadPayloadSize / 1024 / elapseTimeSecs
+              ).toFixed(3);
+              break;
+            case Units['mb/s']:
+              speed = Number(
+                downloadPayloadSize / Math.pow(1024,2) / elapseTimeSecs
+              ).toFixed(3);
+              break;
+            case Units['gb/s']:
+              speed = Number(
+                downloadPayloadSize / Math.pow(1024,3) / elapseTimeSecs
+              ).toFixed(3);
+              break;
+            case Units['tb/s']:
+              speed = Number(
+                downloadPayloadSize / Math.pow(1024,4) / elapseTimeSecs
+              ).toFixed(3);
+              break;
           }
           lastPayloadSize = e.loaded;
           lastTime = Date.now();
           this.speedChanged$.next({
             speed,
-            unit: this.speedUnit,
+            unit: this.config.speedUnit,
           } as NetworkSpeedInfo);
         } else {
           this.speedChanged$.next({
             speed: '0',
-            unit: this.speedUnit,
+            unit: this.config.speedUnit,
           } as NetworkSpeedInfo);
         }
       }),

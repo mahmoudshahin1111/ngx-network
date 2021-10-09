@@ -9,11 +9,7 @@ import { AppComponent } from './app.component';
   declarations: [AppComponent],
   imports: [
     BrowserModule,
-    NgxNetworkModule.forRoot({
-      url: `https://speed.hetzner.de/100MB.bin`,
-      speedUnit: Units['mb/s'],
-      delay: 100,
-    }),
+    NgxNetworkModule.forRoot(),
   ],
   providers: [],
   bootstrap: [AppComponent],

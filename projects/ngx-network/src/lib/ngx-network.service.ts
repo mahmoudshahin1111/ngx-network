@@ -24,7 +24,7 @@ export class NgxNetworkService {
     this.speedChanged$ = new Subject();
     this.onSpeedChanged = this.speedChanged$
       .asObservable()
-      .pipe(throttleTime(this.config.delay));
+      .pipe(throttleTime(this.config.delay || 100));
     this.startSendingPayloadSubscription = new Subscription();
     this.config.speedUnit = this.config.speedUnit || Units['mb/s'];
   }

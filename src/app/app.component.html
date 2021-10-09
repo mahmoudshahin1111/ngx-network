@@ -1,1 +1,4 @@
-<h1>speed:{{networkSpeedInfo?.speed}}</h1>
+<progress [value]="networkSpeedInfo?.speed" max="5"></progress>
+<div>
+  <span>speed: {{ networkSpeedInfo?.speed }} {{ networkSpeedInfo?.unit }}</span>
+</div>

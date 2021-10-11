@@ -70,11 +70,15 @@ Simplest and Easiest 👌💖👏
 
 `NgxNetworkService` Class
 
+### Properties
+| Function | Return | Description 
+| ----------- | ---------: | -------- |
+| `onSpeedChanged` | NetworkSpeedInfo | listen to speed changing and the request for testing speed will run forever until you cancel it  |
 ### Functions
 | Function | Return | Description 
 | ----------- | ---------: | -------- |
 | `getSpeed` | NetworkSpeedInfo | get the current network speed |
-| `onSpeedChanged` | NetworkSpeedInfo | listen to speed changing and the request for testing speed will run forever until you cancel it  |
+
 
 --------------------------------------
 

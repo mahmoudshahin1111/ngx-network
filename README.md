@@ -50,6 +50,8 @@ export class AppComponent implements OnInit {
 
 }
 ```
+Simplest and Easiest 👌💖👏
+
 --------------------------------------
 
 ## Configuration
@@ -58,11 +60,20 @@ you can change the tool configurations by define these attributes when import Ng
 
 | Attribute   |   Required |   Type |                                                                                          Description | Default                            |
 | ----------- | ---------: | -----: | ---------------------------------------------------------------------------------------------------: | ---------------------------------- |
-| `url`       | (Optional) | string | url for image or file used for network speed measure you can change to another file from your assets | https://speed.hetzner.de/100MB.bin |
+| `url`       | (Optional) | string | url for image or file used for network speed measure you can change to another file from your assets | https://raw.githubusercontent.com/mahmoudshahin1111/ngx-network/master/src/assets/mocks/1mb.jpg?token=ALAAGTMRDPHZNG65W46CCZLBNXGRU |
 | `speedUnit` | (Optional) |  Units |                                                                the unit to measure the network speed | 'kb/s'                             |
 | `delay`     | (Optional) | number |                                                                the unit to measure the network speed | 100                                |
 
-Simplest and Easiest 👌💖👏
+-----
+#### Assets 
+
+500kb
+https://raw.githubusercontent.com/mahmoudshahin1111/ngx-network/master/src/assets/mocks/500kb.jpg?token=ALAAGTPLSI62PGQPXAEVN6DBNXHGC
+-----
+1MB
+https://raw.githubusercontent.com/mahmoudshahin1111/ngx-network/master/src/assets/mocks/1mb.jpg?token=ALAAGTMRDPHZNG65W46CCZLBNXGRU
+
+
 
 --------------------------------------
 ## API

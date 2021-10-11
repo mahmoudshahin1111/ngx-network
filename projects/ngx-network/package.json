@@ -1,6 +1,6 @@
 {
   "name": "ngx-network",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "peerDependencies": {
     "@angular/common": "^12.1.0",
     "@angular/core": "^12.1.0"

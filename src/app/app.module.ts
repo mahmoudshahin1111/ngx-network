@@ -9,7 +9,7 @@ import { AppComponent } from './app.component';
   imports: [
     BrowserModule,
     NgxNetworkModule.forRoot({
-      url:`https://raw.githubusercontent.com/jrquick17/ng-speed-test/02c59e4afde67c35a5ba74014b91d44b33c0b3fe/demo/src/assets/500kb.jpg`,
+      url:`https://raw.githubusercontent.com/mahmoudshahin1111/ngx-network/master/src/assets/mocks/1mb.jpg?token=ALAAGTMRDPHZNG65W46CCZLBNXGRU`,
     }),
   ],
   providers: [],

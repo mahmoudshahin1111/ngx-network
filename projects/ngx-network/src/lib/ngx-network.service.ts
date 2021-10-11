@@ -7,20 +7,16 @@ import {
 import { Inject, Injectable } from '@angular/core';
 import {
   BehaviorSubject,
-  interval,
   Observable,
-  Subject,
   Subscriber,
   Subscription,
 } from 'rxjs';
 import {
   concatMap,
-  delay,
   filter,
   finalize,
   map,
   repeat,
-  repeatWhen,
   takeLast,
   tap,
   throttleTime,
@@ -40,7 +36,6 @@ export class NgxNetworkService {
     @Inject(NGX_NETWORK_CONFIG) private config: Config,
     private http: HttpClient
   ) {
-    console.log('new services is created');
     this.speedChanged$ = new BehaviorSubject({
       speed: 0,
       unit: config.speedUnit,
@@ -83,7 +78,6 @@ export class NgxNetworkService {
         tap((payload) => {
           this.speedChanged$.next(payload);
         }),
-        repeat(3),
         map((e) => null)
       );
     }

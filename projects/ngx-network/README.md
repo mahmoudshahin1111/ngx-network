@@ -30,23 +30,27 @@ You can use either the npm command-line tool to install packages.
 })
 ```
 
-- inject `NgxNetworkService` into your class and using `start` function to network speed changing as PRO 😳
+- inject the service  `NgxNetworkService` into your class and using `start` function to network speed changing as PRO 😳
+
 
 ```typescript
 export class AppComponent implements OnInit {
-  /* .... */
-  constructor(private networkService: NgxNetworkService /* 1 */) {
-    /* .... */
-  }
+  constructor(private networkService: NgxNetworkService) {}
   ngOnInit() {
-    /* 2 */
-    this.networkService.start().subscribe((networkSpeedInfo) => {
+    this.networkService.getSpeed().subscribe((networkSpeedInfo) => {
+      /* Do Your Amazing Stuff*/
+    });
+
+    /* OR */
+
+     this.networkService.onSpeedChanged().subscribe((networkSpeedInfo) => {
       /* Do Your Amazing Stuff*/
     });
   }
-  /* .... */
+
 }
 ```
+--------------------------------------
 
 ## Configuration
 
@@ -59,6 +63,26 @@ you can change the tool configurations by define these attributes when import Ng
 | `delay`     | (Optional) | number |                                                                the unit to measure the network speed | 100                                |
 
 Simplest and Easiest 👌💖👏
+
+--------------------------------------
+## API
+
+
+`NgxNetworkService` Class
+
+### Functions
+| Function | Return | Description 
+| ----------- | ---------: | -------- |
+| `getSpeed` | NetworkSpeedInfo | get the current network speed |
+| `onSpeedChanged` | NetworkSpeedInfo | listen to speed changing and the request for testing speed will run forever until you cancel it  |
+
+--------------------------------------
+
+`NetworkSpeedInfo` Interface
+| Attribute | Type | Description |
+| ----------- | ---------: | -------- |
+| `speed` | number | url for image or file used for network speed measure you can change to another file from your assets |
+| `unit` | Units | the unit to measure the network speed |
 
 ## Contribution
 

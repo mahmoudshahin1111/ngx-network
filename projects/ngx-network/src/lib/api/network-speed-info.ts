@@ -1,6 +1,6 @@
 import { Units } from "./units";
 
 export interface NetworkSpeedInfo{
-    speed:string,
+    speed:number,
     unit:Units,
 }

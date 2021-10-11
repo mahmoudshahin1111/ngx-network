@@ -13,7 +13,7 @@ export class AppComponent implements OnInit {
   constructor(private networkService: NgxNetworkService) {
   }
   ngOnInit() {
-    this.networkService.start().subscribe((e) => {
+    this.networkService.getSpeed().subscribe((e) => {
       console.log(e);
       this.networkSpeedInfo = e;
     });

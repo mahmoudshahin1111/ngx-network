@@ -5,58 +5,131 @@ import {
   HttpRequest,
 } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
-import { Observable, Subject, Subscription } from 'rxjs';
-import { delay, map, repeatWhen, tap, throttleTime } from 'rxjs/operators';
+import {
+  BehaviorSubject,
+  interval,
+  Observable,
+  Subject,
+  Subscriber,
+  Subscription,
+} from 'rxjs';
+import {
+  concatMap,
+  delay,
+  filter,
+  finalize,
+  map,
+  repeat,
+  repeatWhen,
+  takeLast,
+  tap,
+  throttleTime,
+} from 'rxjs/operators';
 import { Config } from './api/config';
 import { NetworkSpeedInfo } from './api/network-speed-info';
 import { Units } from './api/units';
 import { NGX_NETWORK_CONFIG } from './ngx-network.module';
 @Injectable()
 export class NgxNetworkService {
-  private speedChanged$: Subject<NetworkSpeedInfo>;
-  private onSpeedChanged: Observable<NetworkSpeedInfo>;
+  private speedChanged$: BehaviorSubject<NetworkSpeedInfo>;
+  private onSpeedChanged$: Observable<NetworkSpeedInfo>;
   private startSendingPayloadSubscription: Subscription;
+  private lastTime: number;
+  private lastPayloadSize: number;
   constructor(
     @Inject(NGX_NETWORK_CONFIG) private config: Config,
     private http: HttpClient
   ) {
     console.log('new services is created');
-    this.speedChanged$ = new Subject();
-    this.onSpeedChanged = this.speedChanged$
-      .asObservable()
-      .pipe(throttleTime(this.config.delay || 100));
+    this.speedChanged$ = new BehaviorSubject({
+      speed: 0,
+      unit: config.speedUnit,
+    });
+    this.onSpeedChanged$ = this.speedChanged$.asObservable().pipe(
+      throttleTime(this.config.delay),
+      filter((payload) => payload.speed !== 0)
+    );
     this.startSendingPayloadSubscription = new Subscription();
+    this.lastPayloadSize = 0;
+    this.lastTime = 0;
   }
-  start(): Observable<NetworkSpeedInfo> {
+  getSpeed() {
     if (this.startSendingPayloadSubscription) {
       this.startSendingPayloadSubscription.unsubscribe();
     }
     this.startSendingPayloadSubscription = this.startSendingPayload(
-      this.config.url
+      this.config.url,
+      false
     ).subscribe();
-    return this.onSpeedChanged;
+    return this.onSpeedChanged$;
   }
-  private startSendingPayload(url: string): Observable<null> {
-    const randomQuery = `q=${Math.round(Math.random() * 1000).toString()}`;
+  onSpeedChanged(): Observable<NetworkSpeedInfo> {
+    if (this.startSendingPayloadSubscription) {
+      this.startSendingPayloadSubscription.unsubscribe();
+    }
+    this.startSendingPayloadSubscription = this.startSendingPayload(
+      this.config.url,
+      true
+    ).subscribe();
+    return this.onSpeedChanged$;
+  }
+  private startSendingPayload(url: string, repeatRequest: boolean): Observable<null> {
+    this.lastTime = 0;
+    this.lastPayloadSize = 0;
+    const randomQuery = `q=${Math.round(Math.random() * 99959).toString()}`;
+    if(!repeatRequest){
+       return this.sendRequest(url, randomQuery).pipe(
+        takeLast(1),
+        tap((payload) => {
+          this.speedChanged$.next(payload);
+        }),
+        repeat(3),
+        map((e) => null)
+      );
+    }
+    return this.sendRequest(url, randomQuery).pipe(
+      tap((payload) => {
+        this.speedChanged$.next(payload);
+      }),
+      finalize(() => {
+        if (!repeatRequest) return;
+        this.startSendingPayloadSubscription.unsubscribe();
+        this.startSendingPayloadSubscription = this.startSendingPayload(
+          url,
+          repeatRequest
+        ).subscribe();
+      }),
+      map((e) => null)
+    );
+  }
+
+  private sendRequest(url: string, params: string) {
     const request = new HttpRequest('GET', url, {
-      params: randomQuery,
+      params,
       responseType: 'arraybuffer',
       reportProgress: true,
     });
-    let lastTime: number = 0;
-    let lastPayloadSize: number = 0;
-    return this.http.request(request).pipe(
-      repeatWhen((e) => e.pipe(delay(1000))),
-      tap((e: HttpEvent<any>) => {
+
+    return this.http
+      .request(request)
+      .pipe(
+        concatMap((httpEvent: HttpEvent<any>) =>
+          this.handleHttpEvents(httpEvent)
+        )
+      );
+  }
+  private handleHttpEvents(e: HttpEvent<ArrayBuffer>) {
+    return new Observable<NetworkSpeedInfo>(
+      (subscriber: Subscriber<NetworkSpeedInfo>) => {
         if (e.type === HttpEventType.DownloadProgress) {
           let currentTime = Date.now();
-          const elapseTimeForEveryPayload = currentTime - lastTime;
+          const elapseTimeForEveryPayload = currentTime - this.lastTime;
+          const elapseTimeSecs = elapseTimeForEveryPayload / 1000;
+          let speed: string = this.speedChanged$.getValue().speed.toString();
           const currentPayloadSize = e.loaded;
           const downloadPayloadSize = Math.abs(
-            currentPayloadSize - lastPayloadSize
+            currentPayloadSize - this.lastPayloadSize
           );
-          const elapseTimeSecs = elapseTimeForEveryPayload / 1000;
-          let speed: string = '0';
           switch (this.config.speedUnit) {
             case Units['kb/s']:
               speed = Number(
@@ -65,34 +138,31 @@ export class NgxNetworkService {
               break;
             case Units['mb/s']:
               speed = Number(
-                downloadPayloadSize / Math.pow(1024,2) / elapseTimeSecs
+                downloadPayloadSize / Math.pow(1024, 2) / elapseTimeSecs
               ).toFixed(3);
               break;
             case Units['gb/s']:
               speed = Number(
-                downloadPayloadSize / Math.pow(1024,3) / elapseTimeSecs
+                downloadPayloadSize / Math.pow(1024, 3) / elapseTimeSecs
               ).toFixed(3);
               break;
             case Units['tb/s']:
               speed = Number(
-                downloadPayloadSize / Math.pow(1024,4) / elapseTimeSecs
+                downloadPayloadSize / Math.pow(1024, 4) / elapseTimeSecs
               ).toFixed(3);
               break;
           }
-          lastPayloadSize = e.loaded;
-          lastTime = Date.now();
-          this.speedChanged$.next({
-            speed,
+          this.lastPayloadSize = e.loaded;
+          this.lastTime = Date.now();
+          subscriber.next({
+            speed: Number(
+              Number(speed) === 0 ? this.speedChanged$.getValue().speed : speed
+            ),
             unit: this.config.speedUnit,
-          } as NetworkSpeedInfo);
-        } else {
-          this.speedChanged$.next({
-            speed: '0',
-            unit: this.config.speedUnit,
-          } as NetworkSpeedInfo);
+          });
         }
-      }),
-      map((e) => null)
+        subscriber.complete();
+      }
     );
   }
 }

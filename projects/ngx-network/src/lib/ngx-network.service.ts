@@ -25,7 +25,9 @@ import { Config } from './api/config';
 import { NetworkSpeedInfo } from './api/network-speed-info';
 import { Units } from './api/units';
 import { NGX_NETWORK_CONFIG } from './ngx-network.module';
-@Injectable()
+@Injectable({
+  providedIn:'root'
+})
 export class NgxNetworkService {
   private speedChanged$: BehaviorSubject<NetworkSpeedInfo>;
   private onSpeedChanged$: Observable<NetworkSpeedInfo>;

@@ -60,7 +60,7 @@ you can change the tool configurations by define these attributes when import Ng
 
 | Attribute   |   Required |   Type |                                                                                          Description | Default                            |
 | ----------- | ---------: | -----: | ---------------------------------------------------------------------------------------------------: | ---------------------------------- |
-| `url`       | (Optional) | string | url for image or file used for network speed measure you can change to another file from your assets | https://raw.githubusercontent.com/mahmoudshahin1111/ngx-network/master/src/assets/mocks/1mb.jpg?token=ALAAGTMRDPHZNG65W46CCZLBNXGRU |
+| `url`       | (Optional) | string | url for image or file used for network speed measure you can change to another file from your assets | .../1mb.jpg  |
 | `speedUnit` | (Optional) |  Units |                                                                the unit to measure the network speed | 'kb/s'                             |
 | `delay`     | (Optional) | number |                                                                the unit to measure the network speed | 100                                |
 
@@ -68,10 +68,12 @@ you can change the tool configurations by define these attributes when import Ng
 #### Assets 
 
 500kb
-https://raw.githubusercontent.com/mahmoudshahin1111/ngx-network/master/src/assets/mocks/500kb.jpg?token=ALAAGTPLSI62PGQPXAEVN6DBNXHGC
------
+
+https://raw.githubusercontent.com/mahmoudshahin1111/ngx-network/master/src/assets/mocks/500kb.jpg
+
 1MB
-https://raw.githubusercontent.com/mahmoudshahin1111/ngx-network/master/src/assets/mocks/1mb.jpg?token=ALAAGTMRDPHZNG65W46CCZLBNXGRU
+
+https://raw.githubusercontent.com/mahmoudshahin1111/ngx-network/master/src/assets/mocks/1mb.jpg
 
 
 
@@ -79,7 +81,7 @@ https://raw.githubusercontent.com/mahmoudshahin1111/ngx-network/master/src/asset
 ## API
 
 
-`NgxNetworkService` Class
+`NgxNetworkService`
 
 ### Properties
 | Function | Return | Description 
@@ -93,7 +95,7 @@ https://raw.githubusercontent.com/mahmoudshahin1111/ngx-network/master/src/asset
 
 --------------------------------------
 
-`NetworkSpeedInfo` Interface
+`NetworkSpeedInfo`
 | Attribute | Type | Description |
 | ----------- | ---------: | -------- |
 | `speed` | number | url for image or file used for network speed measure you can change to another file from your assets |

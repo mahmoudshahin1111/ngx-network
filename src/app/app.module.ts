@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { NgxNetworkModule, Units } from 'projects/ngx-network/src/public-api';
+import { NgxNetworkModule, Units } from 'ngx-network';
 
 import { AppComponent } from './app.component';
 
@@ -9,7 +9,7 @@ import { AppComponent } from './app.component';
   imports: [
     BrowserModule,
     NgxNetworkModule.forRoot({
-      url:`https://raw.githubusercontent.com/mahmoudshahin1111/ngx-network/master/src/assets/mocks/1mb.jpg?token=ALAAGTMRDPHZNG65W46CCZLBNXGRU`,
+      url:`https://raw.githubusercontent.com/mahmoudshahin1111/ngx-network/master/src/assets/mocks/1mb.jpg`,
     }),
   ],
   providers: [],

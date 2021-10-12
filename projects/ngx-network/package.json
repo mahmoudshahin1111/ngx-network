@@ -1,6 +1,30 @@
 {
   "name": "ngx-network",
-  "version": "1.0.0",
+  "version": "1.0.1",
+  "description": "get and tracking the network speed with simplest way ever",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mahmoudshahin1111/ngx-network.git"
+  },
+  "keywords": [
+    "ngx-network",
+    "angular",
+    "ngx",
+    "network-test",
+    "network-speed",
+    "test-internet-speed"
+  ],
+  "author": {
+    "name": "Mahmoud Shahin",
+    "email": "mahmoudshahin1111@gmail.com",
+    "url": "https://www.mahmoudshahin.net/"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mahmoudshahin1111/ngx-network/issues",
+    "email": "mahmoudshahin1111@gmail.com"
+  },
+  "homepage": "https://github.com/mahmoudshahin1111/ngx-network#readme",
   "peerDependencies": {
     "@angular/common": "^12.1.0",
     "@angular/core": "^12.1.0"

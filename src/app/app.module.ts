@@ -8,9 +8,7 @@ import { AppComponent } from './app.component';
   declarations: [AppComponent],
   imports: [
     BrowserModule,
-    NgxNetworkModule.forRoot({
-      url:`https://raw.githubusercontent.com/mahmoudshahin1111/ngx-network/master/src/assets/mocks/1mb.jpg`,
-    }),
+    NgxNetworkModule.forRoot(),
   ],
   providers: [],
   bootstrap: [AppComponent],

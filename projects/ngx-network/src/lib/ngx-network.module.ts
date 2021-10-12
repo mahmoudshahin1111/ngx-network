@@ -19,7 +19,7 @@ export class NgxNetworkModule {
         {
           provide: NGX_NETWORK_CONFIG,
           useValue:{
-              url:config?.url || `https://raw.githubusercontent.com/mahmoudshahin1111/ngx-network/master/src/assets/mocks/1mb.jpg?token=ALAAGTMRDPHZNG65W46CCZLBNXGRU`,
+              url:config?.url || `https://raw.githubusercontent.com/mahmoudshahin1111/ngx-network/master/src/assets/mocks/1mb.jpg`,
               speedUnit: config?.speedUnit ||  Units['mb/s'],
               delay:config?.delay || 100
           }  as Config

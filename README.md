@@ -1,6 +1,5 @@
 [![npm version](https://badge.fury.io/js/ngx-network.svg)](https://badge.fury.io/js/ngx-network)
-
-![CI](https://github.com/mahmoudshahin1111/ngx-network/actions/workflows/.github/workflows/main.yml/badge.svg)
+[!CI](https://github.com/mahmoudshahin1111/ngx-network/actions/workflows/.github/workflows/main.yml/badge.svg)
 
 # NgxNetwork
 

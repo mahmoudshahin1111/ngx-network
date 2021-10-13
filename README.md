@@ -1,5 +1,7 @@
 [![npm version](https://badge.fury.io/js/ngx-network.svg)](https://badge.fury.io/js/ngx-network)
 
+![CI](https://github.com/mahmoudshahin1111/ngx-network/actions/workflows/<WORKFLOW_FILE>/badge.svg)
+
 # NgxNetwork
 
 How many times you want from client to upload or download something

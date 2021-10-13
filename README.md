@@ -1,4 +1,4 @@
-<!-- [![npm version](https://badge.fury.io/js/ngx-popover.svg)](https://badge.fury.io/js/ngx-popover) -->
+[![npm version](https://badge.fury.io/js/ngx-network.svg)](https://badge.fury.io/js/ngx-network)
 
 # NgxNetwork
 
